@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
+import org.json.JSONObject
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
@@ -16,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         result = findViewById<TextView>(R.id.txt_result)
-        val buttonConveter = findViewById<Button>(R.id.btn_converter)
+        val buttonConverter = findViewById<Button>(R.id.btn_converter)
         buttonConverter.setOnClickListener {
             converter()
         }
@@ -40,20 +41,14 @@ class MainActivity : AppCompatActivity() {
 
         Thread {
             val url =
-                URL("https://free.currconv.com/api/v7/convert?q=${currency}_BRL&compact=ultra&apiKeyminhakey")
+                URL("https://free.currconv.com/api/v7/convert?q=${currency}_BRL&compact=ultra&apiKey=edbe5cbbeda39e66c4b0")
             val conn = url.openConnection() as HttpsURLConnection
             try {
                 val data = conn.inputStream.bufferedReader().readText()
-                //{"asdajsd": 1231232}
                 val obj = JSONObject(data)
                 runOnUiThread{
                     val res = obj.getDouble("${currency}_BRL")
                     result.text = "R$${"%.4f".format(value.toDouble() * res)}"
-                    result.visibility = View.VISIBLE
-                }
-
-                runOnUiThread {
-                    result.text = data
                     result.visibility = View.VISIBLE
                 }
 
